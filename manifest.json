@@ -5,15 +5,18 @@
   "version": "0.1",
 
   "icons": {
-    "16": "icon128.png",
-    "32": "icon128.png",
-    "48": "icon128.png",
-    "128": "icon128.png"
+    "16": "/images/icon.png",
+    "32": "/images/icon.png",
+    "48": "/images/icon.png",
+    "128": "/images/icon.png"
   },
 
   "app": {
     "background": {
-      "scripts": ["main.js"]
+      "scripts": ["javascripts/background.js"]
     }
-  }
+  },
+  "permissions": [
+    "storage"
+  ]
 }
