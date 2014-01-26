@@ -1,2 +1,14 @@
-Wellcome back:
-{{token}}
+<div ng-switch on="working">
+
+<div class="loading" ng-switch-when = "true"></div>
+<div ng-switch-default>
+
+  <h2>Projects</h2>
+
+  <ul>
+    <li ng-repeat='project in projects'>
+      {{project.owner}}/{{project.name}}
+    </li>
+  </ul>
+
+</div>

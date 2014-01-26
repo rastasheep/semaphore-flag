@@ -10,6 +10,7 @@ body {
   font-size: 18px;
   color: #4a4a4a;
   line-height: 1.428571429;
+  overflow: auto;
 }
 
 .token-label{
@@ -38,4 +39,21 @@ body {
   bottom: 30px;
   right: 10%;
   text-align: center;
+}
+.loading{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  opacity: 0.6;
+  background: #F9F9F4 url("../images/spinner.png") no-repeat center center;
+ -webkit-animation: infinite-spinning 2s infinite;
+}
+@-webkit-keyframes infinite-spinning {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }

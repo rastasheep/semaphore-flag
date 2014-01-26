@@ -26,15 +26,29 @@ app.controller("mainController", function($scope, $location, tokenService) {
   $scope.submitToken = function() {
     tokenService.setToken($scope.token);
     $location.path("/projects");
+    return true
   };
 
   init();
 });
 
-app.controller("projectsController", function($scope, tokenService) {
-  tokenService.getToken().then( function(value){
-    $scope.token = value;
-  });
+app.controller("projectsController", function($scope, $http, $location, tokenService){
+  $scope.working = true;
+
+  tokenService.getToken()
+    .then( function(value){ $scope.token = value })
+    .then( function(value){
+      url = "https://semaphoreapp.com/api/v1/projects?auth_token=" + $scope.token
+      $http.get(url)
+           .success(function(data) {
+             $scope.projects = data;
+             $scope.working = false;
+           })
+           .error(function(data, status, headers, config) {
+             tokenService.removeToken()
+             $location.path("/");
+           });
+    })
 })
 
 app.service("tokenService", function ($q) {
@@ -49,6 +63,9 @@ app.service("tokenService", function ($q) {
     },
     setToken:function (value) {
       chrome.storage.local.set({"token" : value})
+    },
+    removeToken:function () {
+      chrome.storage.local.remove("token")
     },
   };
 });
