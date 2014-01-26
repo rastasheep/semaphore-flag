@@ -22,9 +22,9 @@ app.run(function($rootScope){
   $rootScope.closeAlert = function(index) {
     $rootScope.alerts.splice(index, 1);
   };
-})
+});
 
-app.controller("mainController", function($scope, $rootScope, $location, tokenService) {
+app.controller("mainController", function($rootScope, $scope, $location, tokenService) {
 
   var init = function() {
     tokenService.getToken().then( function(value){
@@ -52,34 +52,30 @@ app.controller("mainController", function($scope, $rootScope, $location, tokenSe
   init();
 });
 
-app.controller("projectsController", function($rootScope, $scope, $http, $location, tokenService){
+app.controller("projectsController", function($rootScope, $scope, $location, projectService){
+
   $scope.working = true;
+  $scope.morePages = true;
+  var pagesShown = 1;
+  var pageSize = 5;
 
   var init = function() {
     getProjects()
   }
 
   var getProjects = function(){
-    tokenService.getToken()
-      .then( function(value){ $scope.token = value })
-      .then( function(value){
-        url = "https://semaphoreapp.com/api/v1/projects?auth_token=" + $scope.token
-        $http.get(url)
-          .success(function(data) {
-            $scope.projects = data;
-            $scope.working = false;
-         })
-          .error(function(data, status, headers, config) {
-            tokenService.removeToken();
-            $rootScope.addAlert("danger", "Wrong token, please try again.");
-            $location.path("/");
-          });
-      });
-   }
-
-  $scope.morePages = true;
-  var pagesShown = 1;
-  var pageSize = 5;
+    projectService.getProjects()
+      .then( 
+        function(value){ 
+          $scope.projects = value;
+          $scope.working = false;
+        },
+        function(data) {
+          $rootScope.addAlert("danger", data);
+          $location.path("/");
+        }
+      );
+  }
 
   $scope.pageLimit = function() {
     return pageSize * pagesShown;
@@ -101,13 +97,40 @@ app.service("tokenService", function ($q) {
       chrome.storage.local.get("token", function (result) {
         q.resolve(result.token);
       });
+
       return q.promise
     },
+
     setToken:function (value) {
       chrome.storage.local.set({"token" : value})
     },
+
     removeToken:function () {
       chrome.storage.local.remove("token")
     },
   };
 });
+
+app.service("projectService", function ($q, $http, tokenService) {
+  return {
+    getProjects:function(){
+      var q = $q.defer()
+
+      tokenService.getToken()
+        .then( function(value){
+          url = "https://semaphoreapp.com/api/v1/projects?auth_token=" + value;
+          $http.get(url)
+            .success(function(data) {
+              q.resolve(data);
+            })
+            .error(function(data, status, headers, config) {
+              tokenService.removeToken();
+              q.reject("Wrong token, please try again.")
+            });
+        });
+
+      return q.promise;
+    }
+
+  }
+})
