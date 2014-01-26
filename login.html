@@ -1,3 +1,5 @@
+<alert ng-repeat="alert in getAlerts()" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+
 <form ng-submit= "submitToken(token)">
   <label class="token-label"for="api-token"></label>
   <input class="token-input" 
