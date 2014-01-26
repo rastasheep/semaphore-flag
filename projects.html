@@ -6,9 +6,11 @@
   <h2>Projects</h2>
 
   <ul>
-    <li ng-repeat='project in projects'>
+    <li ng-repeat='project in projects | limitTo: pageLimit()'>
       {{project.owner}}/{{project.name}}
     </li>
   </ul>
+
+  <button ng-show="morePages" ng-click="nextPage()">Show more</button>
 
 </div>

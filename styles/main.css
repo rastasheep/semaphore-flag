@@ -57,3 +57,7 @@ body {
     -webkit-transform: rotate(360deg);
   }
 }
+
+.ng-hide {
+  display: none !important;
+}

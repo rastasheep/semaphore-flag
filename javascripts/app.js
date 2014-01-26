@@ -48,7 +48,18 @@ app.controller("projectsController", function($scope, $http, $location, tokenSer
              tokenService.removeToken()
              $location.path("/");
            });
-    })
+    });
+
+    $scope.morePages = true;
+    var pagesShown = 1;
+    var pageSize = 5;
+    $scope.pageLimit = function() {
+      return pageSize * pagesShown;
+    };
+    $scope.nextPage = function() {
+      pagesShown = pagesShown + 1;
+      $scope.morePages = pagesShown < ($scope.projects.length / pageSize);
+    };
 })
 
 app.service("tokenService", function ($q) {
