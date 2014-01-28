@@ -1,16 +1,64 @@
-<div ng-switch on="working">
+<div class="loading" ng-show = "working"></div>
 
-<div class="loading" ng-switch-when = "true"></div>
-<div ng-switch-default>
+<div ng-hide="working">
 
-  <h2>Projects</h2>
+  <div class="search-bar">
+    <input class="input search-input ng-pristine ng-valid" 
+           placeholder="Filter your projects" 
+           type="text"
+           ng-model="projectSearch.name">
+      <button type="submit" class="btn btn-default pull-right">
+        <i class="glyphicon glyphicon-star-empty"></i>
+      </button>
+  </div>
 
-  <ul>
-    <li ng-repeat='project in projects | limitTo: pageLimit()'>
-      {{project.owner}}/{{project.name}}
-    </li>
-  </ul>
 
-  <button ng-show="morePages" ng-click="nextPage()">Show more</button>
+  <accordion close-others="true">
+    <accordion-group ng-repeat='project in filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="isopen" >
+      <accordion-heading >
+        {{project.owner}}/{{project.name}}
+        <i class="pull-right glyphicon"
+           ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"></i>
+      </accordion-heading>
 
-</div>
+      <ol class="breadcrumb text-center">
+        <li class="active">
+          <i class="glyphicon glyphicon-star"></i>
+<!--      <a href="#" tooltip-placement="bottom" tooltip="Star this project">
+          </a> -->
+        </li>
+        <li class="active">
+          <i class="glyphicon glyphicon-cog"></i>
+<!--      <a href="#"tooltip-placement="bottom" tooltip="Settings">
+          </a> -->
+        </li>
+      </ol>
+
+      <table class="table">
+          <tbody>
+            <tr class="{{branch.result}}" ng-repeat='branch in project.branches'>
+              
+              <td> {{branch.branch_name}} </td>
+              <td class="text-right">{{branch.finished_at | date:"d MMM - H:mm"}}</td>
+              
+            </tr>
+
+            <ol class="breadcrumb text-center" ng-hide="project.branches.length">
+              <li class="active">This project have no branches</li>
+            </ol>
+
+          </tbody>
+        </table>
+
+    </accordion-group>
+
+    <ol class="breadcrumb text-center" ng-hide="filteredProjects.length">
+      <li class="active">No projects found</li>
+    </ol>
+
+  </accordion>
+
+  <button type="button"
+          class="btn btn-default btn-lg btn-block more"
+          ng-show="morePages"
+          ng-click="nextPage()"> Show more</button>

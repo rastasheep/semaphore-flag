@@ -1,4 +1,4 @@
-var app = angular.module("semaphoreFlag", ["ngRoute"]);
+var app = angular.module("semaphoreFlag", ["ngRoute", "ui.bootstrap"]);
 
 app.config(function($routeProvider) {
   $routeProvider
@@ -57,7 +57,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, pro
   $scope.working = true;
   $scope.morePages = true;
   var pagesShown = 1;
-  var pageSize = 5;
+  var pageSize = 10;
 
   var init = function() {
     getProjects()
