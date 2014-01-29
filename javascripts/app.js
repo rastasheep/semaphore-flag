@@ -57,7 +57,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, pro
   $scope.working = true;
   $scope.morePages = true;
   var pagesShown = 1;
-  var pageSize = 10;
+  var pageSize = 11;
 
   var init = function() {
     getProjects()
