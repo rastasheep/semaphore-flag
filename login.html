@@ -3,11 +3,16 @@
        close="closeAlert($index)">{{alert.msg}}</alert>
 
 
-<form ng-submit= "submitToken(token)">
-  <label class="token-label"for="api-token"></label>
+<form ng-submit= "submitToken(token)" class="text-center">
+  <label class="token-label"for="api-token">
+  <h1>Make<br>and<br>Deliver<br><span class="green">green code.</span></h1> 
+ </label>
   <input class="input token-input" 
          id="api-token"
          placeholder="Enter your API token"
          type="text"
          ng-model="token">
+ <div class="small token-help">
+   <a href="#">You can find it here.</a>
+ </div>
 </form>
