@@ -65,6 +65,8 @@ body {
   }
 }
 
+.branch a {color: #4A4A4A; }
+
 .passed {
   background-color: #E6F4CA;
   border-color: #CFE0AE;
@@ -87,12 +89,10 @@ body {
   border-color: #DDD;
 }
 .search-bar{
-  padding: 10px 0;
+  padding: 10px;
   vertical-align: middle;
 }
-.search-input{
-  width: 89%;
-}
+.search-bar input{width: 76%; }
 
 .footer a{opacity: 0.3; }
 .footer a:hover{opacity: 1; }
@@ -100,6 +100,7 @@ body {
 
 
 
+.panel-title a {display: block; }
 .alert{
   position: absolute;
   width: 100%;
