@@ -24,10 +24,10 @@ app.run(function($rootScope){
   };
 });
 
-app.controller("mainController", function($rootScope, $scope, $location, tokenService) {
+app.controller("mainController", function($rootScope, $scope, $location, sharedData) {
 
   var init = function() {
-    tokenService.getToken().then( function(value){
+    sharedData.getToken().then( function(value){
       if (value)
         $location.path("/projects");
     });
@@ -35,7 +35,7 @@ app.controller("mainController", function($rootScope, $scope, $location, tokenSe
   };
 
   $scope.submitToken = function() {
-    tokenService.setToken($scope.token);
+    sharedData.setToken($scope.token);
     $location.path("/projects");
     return true
   };
@@ -57,8 +57,6 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   $scope.morePages = true;
   var pagesShown = 1;
   var pageSize = 11;
-
-  $scope.isOpen = true;
 
   var init = function() {
     getProjects();
@@ -95,12 +93,13 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
       $scope.openProjectHash = null;
     else
       $scope.openProjectHash = project.hash_id;
-  }
+  };
 
   $scope.refresh = function() {
     $scope.refreshing = true;
     getProjects();
-  }
+  };
+
   $scope.pageLimit = function() {
     return pageSize * pagesShown;
   };
@@ -108,13 +107,12 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   $scope.nextPage = function() {
     pagesShown = pagesShown + 1;
     $scope.morePages = pagesShown < ($scope.projects.length / pageSize);
-
   };
 
   init();
 })
 
-app.service("tokenService", function ($q) {
+app.service("sharedData", function ($q) {
   return {
     getToken:function () {
       var q = $q.defer()
@@ -132,16 +130,16 @@ app.service("tokenService", function ($q) {
 
     removeToken:function () {
       chrome.storage.local.remove("token")
-    },
+    }
   };
 });
 
-app.service("projectService", function ($q, $http, tokenService) {
+app.service("projectService", function ($q, $http, sharedData) {
   return {
     getProjects:function(){
       var q = $q.defer()
 
-      tokenService.getToken()
+      sharedData.getToken()
         .then( function(value){
           url = "https://semaphoreapp.com/api/v1/projects?auth_token=" + value;
           $http.get(url)
@@ -149,13 +147,11 @@ app.service("projectService", function ($q, $http, tokenService) {
               q.resolve(data);
             })
             .error(function(data, status, headers, config) {
-              tokenService.removeToken();
+              sharedData.removeToken();
               q.reject("Wrong token, please try again.")
             });
         });
-
       return q.promise;
-    }
-
-  }
+    } 
+  };
 })
