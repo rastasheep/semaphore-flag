@@ -1,4 +1,4 @@
-<div class="loading" ng-show = "working"></div>
+<div class="loading spin" ng-show = "working"></div>
 
 <div ng-hide="working">
 
@@ -10,17 +10,19 @@
            placeholder="Filter your projects" 
            type="text"
            ng-model="projectSearch.name">
-      <button type="submit" class="btn btn-default">
-        <i class="glyphicon glyphicon-refresh"></i>
+      <button type="submit" class="btn btn-default" ng-click="refresh()">
+        <i class="glyphicon glyphicon-refresh" ng-class="{spin: refreshing}" disabled="refreshing"></i>
       </button>
   </div>
 
 
   <accordion close-others="true">
-    <accordion-group ng-repeat='project in filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="isopen" >
+    <accordion-group ng-repeat='project in filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="project.open" >
       <accordion-heading >
-        {{project.owner}}/{{project.name}}
-        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"></i>
+        <div ng-click="showProject(project)">
+          {{project.owner}}/{{project.name}}
+          <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project.open, 'glyphicon-chevron-right': !project.open}"></i>
+        </div>
       </accordion-heading>
 
       <ol class="breadcrumb text-center">

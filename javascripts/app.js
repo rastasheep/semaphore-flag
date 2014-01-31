@@ -28,9 +28,8 @@ app.controller("mainController", function($rootScope, $scope, $location, tokenSe
 
   var init = function() {
     tokenService.getToken().then( function(value){
-      if (value){
+      if (value)
         $location.path("/projects");
-      }
     });
     return true;
   };
@@ -52,15 +51,27 @@ app.controller("mainController", function($rootScope, $scope, $location, tokenSe
   init();
 });
 
-app.controller("projectsController", function($rootScope, $scope, $location, projectService){
+app.controller("projectsController", function($rootScope, $scope, $location, $timeout, projectService){
 
   $scope.working = true;
   $scope.morePages = true;
   var pagesShown = 1;
   var pageSize = 11;
 
+  $scope.isOpen = true;
+
   var init = function() {
-    getProjects()
+    getProjects();
+    $timeout(init, 60000);
+  }
+
+  var setOpenProject = function() {
+    if($scope.openProjectHash != null){
+      var proj = $scope.projects.filter(function(obj){
+        return obj.hash_id == $scope.openProjectHash
+      })[0];
+      proj.open = true;
+    }
   }
 
   var getProjects = function(){
@@ -68,15 +79,28 @@ app.controller("projectsController", function($rootScope, $scope, $location, pro
       .then( 
         function(value){ 
           $scope.projects = value;
+          setOpenProject();
           $scope.working = false;
+          $scope.refreshing = false;
         },
         function(data) {
           $rootScope.addAlert("danger", data);
           $location.path("/");
         }
       );
+  };
+
+  $scope.showProject = function(project) {
+    if ($scope.openProjectHash == project.hash_id)
+      $scope.openProjectHash = null;
+    else
+      $scope.openProjectHash = project.hash_id;
   }
 
+  $scope.refresh = function() {
+    $scope.refreshing = true;
+    getProjects();
+  }
   $scope.pageLimit = function() {
     return pageSize * pagesShown;
   };
@@ -84,6 +108,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, pro
   $scope.nextPage = function() {
     pagesShown = pagesShown + 1;
     $scope.morePages = pagesShown < ($scope.projects.length / pageSize);
+
   };
 
   init();
