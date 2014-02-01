@@ -109,6 +109,15 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
     $scope.morePages = pagesShown < ($scope.projects.length / pageSize);
   };
 
+ $scope.$watchCollection('filteredProjects', function() {
+  if ($scope.filteredProjects != null){
+    hidenPojects = $scope.projects.length > $scope.filteredProjects.length
+    pagesMore = pagesShown <= ($scope.filteredProjects.length / pageSize);
+    
+    $scope.morePages = hidenPojects && pagesMore;
+  };
+ });
+
   init();
 })
 

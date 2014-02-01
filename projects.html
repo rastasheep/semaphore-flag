@@ -17,7 +17,7 @@
 
 
   <accordion close-others="true">
-    <accordion-group ng-repeat='project in filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="project.open" >
+    <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="project.open" >
       <accordion-heading >
         <div ng-click="showProject(project)">
           {{project.owner}}/{{project.name}}
@@ -70,7 +70,7 @@
     </ol>
 
   </accordion>
-
+  
   <div class="text-center more">
     <button type="button"
             class="btn btn-default"
