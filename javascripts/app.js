@@ -113,7 +113,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   if ($scope.filteredProjects != null){
     hidenPojects = $scope.projects.length > $scope.filteredProjects.length
     pagesMore = pagesShown <= ($scope.filteredProjects.length / pageSize);
-    
+
     $scope.morePages = hidenPojects && pagesMore;
   };
  });
@@ -164,3 +164,11 @@ app.service("projectService", function ($q, $http, sharedData) {
     } 
   };
 })
+
+app.filter('fromNow', function() {
+  return function(date) {
+    if(date != null){ 
+      return moment(date).fromNow();
+    }
+  }
+});
