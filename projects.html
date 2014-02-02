@@ -15,7 +15,6 @@
       </button>
   </div>
 
-
   <accordion close-others="true">
     <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="project.open" >
       <accordion-heading >

@@ -9,11 +9,16 @@ app.config(function($routeProvider) {
     .when("/projects", {
       templateUrl : "projects.html",
       controller  : "projectsController"
+    })
+    .when("/offline", {
+      templateUrl : "offline.html",
+      controller  : "offlineController"
     });
 });
 
-app.run(function($rootScope){
+app.run(function($rootScope, $window, $location, $timeout){
   $rootScope.alerts = [];
+  $rootScope.onLine = $window.navigator.onLine;
 
   $rootScope.addAlert = function(type, message) {
     $rootScope.alerts.push({type: type, msg: message});
@@ -22,16 +27,32 @@ app.run(function($rootScope){
   $rootScope.closeAlert = function(index) {
     $rootScope.alerts.splice(index, 1);
   };
+
+  $window.addEventListener("online", function () {
+    $rootScope.onLine = true;
+    $timeout($location.path("/projects"), 30000);
+    $rootScope.$digest();
+  });
+
+  $window.addEventListener("offline", function () {
+    $rootScope.onLine = false;
+    $location.path("/offline");
+    $rootScope.$digest();
+  });
+
 });
 
 app.controller("mainController", function($rootScope, $scope, $location, sharedData) {
 
   var init = function() {
-    sharedData.getToken().then( function(value){
-      if (value)
-        $location.path("/projects");
-    });
-    return true;
+    if ($rootScope.onLine){
+      sharedData.getToken().then( function(value){
+        if (value)
+          $location.path("/projects");
+      });
+    }else{
+      $location.path("/offline");
+    }
   };
 
   $scope.submitToken = function() {
@@ -57,10 +78,11 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   $scope.morePages = true;
   var pagesShown = 1;
   var pageSize = 11;
+  var timeoutPromise;
 
   var init = function() {
+    timeoutPromise = $timeout(init, 60000);
     getProjects();
-    $timeout(init, 60000);
   }
 
   var setOpenProject = function() {
@@ -89,10 +111,11 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   };
 
   $scope.showProject = function(project) {
-    if ($scope.openProjectHash == project.hash_id)
+    if ($scope.openProjectHash == project.hash_id){
       $scope.openProjectHash = null;
-    else
+    } else {
       $scope.openProjectHash = project.hash_id;
+    };
   };
 
   $scope.refresh = function() {
@@ -109,36 +132,42 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
     $scope.morePages = pagesShown < ($scope.projects.length / pageSize);
   };
 
- $scope.$watchCollection('filteredProjects', function() {
-  if ($scope.filteredProjects != null){
-    hidenPojects = $scope.projects.length > $scope.filteredProjects.length
-    pagesMore = pagesShown <= ($scope.filteredProjects.length / pageSize);
+  $scope.$watchCollection('filteredProjects', function() {
+    if ($scope.filteredProjects != null){
+      hidenPojects = $scope.projects.length > $scope.filteredProjects.length;
+      pagesMore = pagesShown <= ($scope.filteredProjects.length / pageSize);
 
-    $scope.morePages = hidenPojects && pagesMore;
-  };
- });
+      $scope.morePages = hidenPojects && pagesMore;
+    };
+  });
+
+  $scope.$on('$destroy', function(){
+    $timeout.cancel(timeoutPromise);
+  });
 
   init();
 })
 
+app.controller("offlineController", function() {});
+
 app.service("sharedData", function ($q) {
   return {
     getToken:function () {
-      var q = $q.defer()
+      var q = $q.defer();
 
       chrome.storage.local.get("token", function (result) {
         q.resolve(result.token);
       });
 
-      return q.promise
+      return q.promise;
     },
 
     setToken:function (value) {
-      chrome.storage.local.set({"token" : value})
+      chrome.storage.local.set({"token" : value});
     },
 
     removeToken:function () {
-      chrome.storage.local.remove("token")
+      chrome.storage.local.remove("token");
     }
   };
 });
@@ -146,7 +175,7 @@ app.service("sharedData", function ($q) {
 app.service("projectService", function ($q, $http, sharedData) {
   return {
     getProjects:function(){
-      var q = $q.defer()
+      var q = $q.defer();
 
       sharedData.getToken()
         .then( function(value){
