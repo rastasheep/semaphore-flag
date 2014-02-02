@@ -1,22 +1,28 @@
-<div class="loading spin" ng-show = "working"></div>
+<div class="loading spin" ng-show="working"></div>
 
 <div ng-hide="working">
 
   <div class="search-bar text-center">
-      <button type="submit" class="btn btn-default">
-        <i class="glyphicon glyphicon-star-empty"></i>
+      <button type="submit" 
+              ng-click="toggleStarFilter()"
+              class="btn btn-default"
+              ng-class="{true:'active'}[filterStared]"
+              tooltip-placement="bottom"
+              tooltip="Filter starred">
+        <i class="glyphicon"
+           ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty'}[filterStared]"></i>
       </button>
     <input class="input" 
            placeholder="Filter your projects" 
            type="text"
            ng-model="projectSearch.name">
-      <button type="submit" class="btn btn-default" ng-click="refresh()">
+      <button type="submit" class="btn btn-default" ng-click="refresh()" tooltip="Refresh" tooltip-placement="bottom">
         <i class="glyphicon glyphicon-refresh" ng-class="{spin: refreshing}" disabled="refreshing"></i>
       </button>
   </div>
 
   <accordion close-others="true">
-    <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filter:projectSearch |limitTo: pageLimit() )' is-open="project.open" >
+    <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filterStarred:this | filter:projectSearch | limitTo: pageLimit() )' is-open="project.open" >
       <accordion-heading >
         <div ng-click="showProject(project)">
           {{project.owner}}/{{project.name}}
@@ -26,9 +32,11 @@
 
       <ol class="breadcrumb text-center">
         <li class="active">
-          <i class="glyphicon glyphicon-star"></i>
-<!--      <a href="#" tooltip-placement="bottom" tooltip="Star this project">
-          </a> -->
+          <a href="#" tooltip-placement="bottom" tooltip="Toggle star"
+             ng-click="toggleStar(project); $event.preventDefault()">
+            <i class="glyphicon"
+               ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty'}[isStarred(project)]"></i>
+          </a>
         </li>
         <li class="active">
           <i class="glyphicon glyphicon-bell"></i>

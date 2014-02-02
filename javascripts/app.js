@@ -72,7 +72,7 @@ app.controller("mainController", function($rootScope, $scope, $location, sharedD
   init();
 });
 
-app.controller("projectsController", function($rootScope, $scope, $location, $timeout, projectService){
+app.controller("projectsController", function($rootScope, $scope, $location, $timeout, projectService, sharedData){
 
   $scope.working = true;
   $scope.morePages = true;
@@ -81,9 +81,37 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   var timeoutPromise;
 
   var init = function() {
-    timeoutPromise = $timeout(init, 60000);
-    getProjects();
+    getStarFilter();
+    getStarred();
+    mainLoop();
   }
+
+  var mainLoop = function(){
+    getProjects();
+    timeoutPromise = $timeout(mainLoop, 60000);
+  }
+
+  var getStarFilter = function(){
+    sharedData.getStarFilter()
+      .then(function(value){
+        if (value != null){
+          $scope.filterStared = value;
+        } else{
+          $scope.filterStared = false;
+        };
+    });
+  };
+
+  var getStarred = function(){
+    sharedData.getStarred()
+      .then(function(value){
+        if (value != null){
+          $scope.starred = value;
+        } else{
+          $scope.starred = [];
+        };
+    });
+  };
 
   var setOpenProject = function() {
     if($scope.openProjectHash != null){
@@ -116,6 +144,25 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
     } else {
       $scope.openProjectHash = project.hash_id;
     };
+  };
+
+  $scope.toggleStarFilter = function(){
+    $scope.filterStared = !$scope.filterStared;
+    sharedData.setStarFilter($scope.filterStared);
+  }
+
+  $scope.toggleStar = function(project){
+    if ($scope.isStarred(project)) {
+      $scope.starred.splice($scope.starred.indexOf(project.hash_id), 1);
+    }else{
+      $scope.starred.push(project.hash_id);
+    };
+    sharedData.setStarred($scope.starred);
+  };
+
+  $scope.isStarred = function(project) {
+    var index = $scope.starred.indexOf(project.hash_id);
+    return (index > -1) ? true : false
   };
 
   $scope.refresh = function() {
@@ -168,7 +215,36 @@ app.service("sharedData", function ($q) {
 
     removeToken:function () {
       chrome.storage.local.remove("token");
-    }
+    },
+
+    getStarFilter:function (value) {
+      var q = $q.defer();
+
+      chrome.storage.local.get("filterStared", function (result) {
+        q.resolve(result.filterStared);
+      });
+
+      return q.promise;
+    },
+
+    setStarFilter:function (value) {
+      chrome.storage.local.set({"filterStared" : value});
+    },
+
+    getStarred:function (value) {
+      var q = $q.defer();
+
+      chrome.storage.local.get("starred", function (result) {
+        q.resolve(result.starred);
+      });
+
+      return q.promise;
+    },
+
+    setStarred:function (value) {
+      chrome.storage.local.set({"starred" : value});
+    },
+
   };
 });
 
@@ -199,5 +275,17 @@ app.filter('fromNow', function() {
     if(date != null){ 
       return moment(date).fromNow();
     }
+  }
+});
+
+app.filter('filterStarred', function() {
+  return function(projects, scope) {
+    if(projects != null && scope.filterStared)
+      return projects.filter(function(proj){
+        var index = scope.starred.indexOf(proj.hash_id);
+        return index > -1
+        });
+    else
+      return projects
   }
 });
