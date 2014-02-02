@@ -44,7 +44,7 @@
 
       <table class="table">
           <tbody>
-            <tr class="{{branch.result}} branch" ng-repeat='branch in project.branches'>
+            <tr class="{{branch.result}} branch" ng-repeat="branch in project.branches | orderBy:'branch_name'">
 
               <td>
                 <a href="{{branch.branch_url}}" target="_blank"> {{branch.branch_name}}</a>
@@ -64,9 +64,11 @@
 
     </accordion-group>
 
-    <ol class="breadcrumb text-center" ng-hide="filteredProjects.length">
-      <li class="active">No projects found</li>
-    </ol>
+    <figure ng-hide="filteredProjects.length">
+      <h1 class="token-label">
+        Project </br>you seek </br>can't be located.
+      </h1>
+    </figure>
 
   </accordion>
 
