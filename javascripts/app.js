@@ -80,9 +80,41 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   var pageSize = 11;
   var timeoutPromise;
 
+  var subscribeToPusherEvents = function(){
+    var pusher = new Pusher('196081c6021641d28f43');
+
+    sharedData.getToken()
+    .then( function(value){
+      var channel = pusher.subscribe(value);
+
+      channel.bind('build', function(data) {
+        getProjects();
+        showNotification(data);
+      });
+    })
+  };
+
+  var showNotification = function(data){
+    var opt = {
+      type: "basic",
+      title: "Semaphore" + " [" + data["project_name"] + "]",
+      message: "Build on '" + data["branch_name"] + "' branch " + data["result"]+ ".",
+      iconUrl: "images/" + data["result"] + ".png"
+    }
+
+    id = data["project_name"] + data["branch_name"] + data["build_number"]
+
+    chrome.notifications.create(id, opt, function(){});
+    chrome.notifications.onClicked.addListener(function(id){
+      chrome.app.window.current().focus();
+      chrome.notifications.clear(id, function(){})
+    });
+  };
+
   var init = function() {
     getStarFilter();
     getStarred();
+    subscribeToPusherEvents();
     mainLoop();
   }
 
