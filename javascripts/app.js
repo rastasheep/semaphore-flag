@@ -30,7 +30,7 @@ app.run(function($rootScope, $window, $location, $timeout){
 
   $window.addEventListener("online", function () {
     $rootScope.onLine = true;
-    $timeout($location.path("/projects"), 30000);
+    $timeout(function() { $location.path("/projects") }, 10000);
     $rootScope.$digest();
   });
 
@@ -223,7 +223,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
     }else{
       message = "http://semaphoreflag.herokuapp.com/" +  token
       $rootScope.addAlert("success", message);
-       
+
       $scope.notifications.splice($scope.notifications.indexOf(project.hash_id), 1);
       $scope.notifications.push(project.hash_id);
     };
