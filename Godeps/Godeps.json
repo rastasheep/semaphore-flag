@@ -1,0 +1,19 @@
+{
+	"ImportPath": "github.com/rastasheep/semaphore-flag",
+	"GoVersion": "go1.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Rev": "1817ef28a0e76985d513785871920d9f0c3df187"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/martini",
+			"Comment": "v0.1-84-gb34eed6",
+			"Rev": "b34eed601c9eb3980110284e47c393e75afb0576"
+		},
+		{
+			"ImportPath": "github.com/timonv/pusher",
+			"Rev": "011114c803b3adb8dab3c66f3d4648e8b9513bd9"
+		}
+	]
+}
