@@ -1,5 +1,9 @@
 <div class="loading spin" ng-show="working"></div>
 
+<alert ng-repeat="alert in getAlerts()"
+       type="alert.type"
+       close="closeAlert($index)">{{alert.msg}}</alert>
+
 <div ng-hide="working">
 
   <div class="search-bar text-center">
@@ -31,23 +35,31 @@
       </accordion-heading>
 
       <ol class="breadcrumb text-center">
-        <li class="active">
+        <li>
           <a href="#" tooltip-placement="bottom" tooltip="Toggle star"
              ng-click="toggleStar(project); $event.preventDefault()">
             <i class="glyphicon"
-               ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty'}[isStarred(project)]"></i>
+               ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty gray'}[isStarred(project)]"></i>
           </a>
         </li>
-        <li class="active">
-          <i class="glyphicon glyphicon-bell"></i>
-<!--      <a href="#"tooltip-placement="bottom" tooltip="Settings">
-          </a> -->
+        <li>
+          <a href="#" tooltip-placement="bottom" tooltip="Notifications"
+             ng-click="toggleNotification(project); $event.preventDefault()">
+            <i class="glyphicon glyphicon-bell"
+               ng-class="{false:'gray'}[haveNotification(project)]"></i>
+          </a> 
         </li>
-        <li class="active">
+        <li>
+          <a href="https://github.com/{{project.owner + '/' + project.name}}" tooltip-placement="bottom" target="_blank" tooltip="View on GitHub"> 
+            <i class="glyphicon glyphicon-cloud "></i>
+          </a> 
+        </li>
+        <li>
           <a href="#" tooltip-placement="bottom" target="_blank" tooltip="View on Semaphore"> 
             <i class="glyphicon glyphicon-new-window"></i>
           </a> 
         </li>
+      </ol>
       </ol>
 
       <table class="table">

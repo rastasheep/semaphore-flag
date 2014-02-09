@@ -79,12 +79,22 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   var pagesShown = 1;
   var pageSize = 11;
   var timeoutPromise;
+  var token;
+
+  $scope.getAlerts = function() {
+    return $rootScope.alerts;
+  };
+
+  $scope.closeAlert = function(index) {
+    $rootScope.closeAlert();
+  };
 
   var subscribeToPusherEvents = function(){
     var pusher = new Pusher('196081c6021641d28f43');
 
     sharedData.getToken()
     .then( function(value){
+      token = value
       var channel = pusher.subscribe(value);
 
       channel.bind('build', function(data) {
@@ -114,6 +124,7 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
   var init = function() {
     getStarFilter();
     getStarred();
+    getNotifications();
     subscribeToPusherEvents();
     mainLoop();
   }
@@ -141,6 +152,17 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
           $scope.starred = value;
         } else{
           $scope.starred = [];
+        };
+    });
+  };
+
+  var getNotifications = function(){
+    sharedData.getNotifications()
+      .then(function(value){
+        if (value != null){
+          $scope.notifications = value;
+        } else{
+          $scope.notifications = [];
         };
     });
   };
@@ -192,10 +214,33 @@ app.controller("projectsController", function($rootScope, $scope, $location, $ti
     sharedData.setStarred($scope.starred);
   };
 
+  $scope.toggleNotification = function(project){
+    if ($scope.haveNotification(project)) {
+      message = "Please remove webhook from " + project["name"]
+      $rootScope.addAlert("success", message);
+
+      $scope.notifications.splice($scope.notifications.indexOf(project.hash_id), 1);
+    }else{
+      message = "http://semaphoreflag.herokuapp.com/" +  token
+      $rootScope.addAlert("success", message);
+       
+      $scope.notifications.splice($scope.notifications.indexOf(project.hash_id), 1);
+      $scope.notifications.push(project.hash_id);
+    };
+    sharedData.setNotifications($scope.notifications);
+  };
+
+
   $scope.isStarred = function(project) {
     var index = $scope.starred.indexOf(project.hash_id);
     return (index > -1) ? true : false
   };
+
+  $scope.haveNotification = function(project) {
+    var index = $scope.notifications.indexOf(project.hash_id);
+    return (index > -1) ? true : false
+  };
+
 
   $scope.refresh = function() {
     $scope.refreshing = true;
@@ -275,6 +320,20 @@ app.service("sharedData", function ($q) {
 
     setStarred:function (value) {
       chrome.storage.local.set({"starred" : value});
+    },
+
+    getNotifications:function (value) {
+      var q = $q.defer();
+
+      chrome.storage.local.get("notifications", function (result) {
+        q.resolve(result.notifications);
+      });
+
+      return q.promise;
+    },
+
+    setNotifications:function (value) {
+      chrome.storage.local.set({"notifications" : value});
     },
 
   };

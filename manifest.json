@@ -21,6 +21,6 @@
     "notifications",
     "app.window",
     "https://semaphoreapp.com/api/v1/",
-    "http://stats.pusher.com/timeline/*"
+    "http://stats.pusher.com/timeline/1"
   ]
 }

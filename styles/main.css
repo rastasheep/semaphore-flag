@@ -67,6 +67,8 @@ body {
   }
 }
 
+.gray { color:  #CCC !important;}
+
 .branch a {color: #4A4A4A; }
 
 .passed {
@@ -104,13 +106,15 @@ body {
 .footer a{opacity: 0.3; }
 .footer a:hover{opacity: 1; }
 
-
-
+/* Override bootstrap stuff */
 
 .panel-title a {display: block; }
 .alert{
   position: absolute;
   width: 100%;
+  -webkit-user-select: text;
+  z-index:999;
+
 }
 
 .table, .breadcrumb {
