@@ -70,7 +70,7 @@
                 <a href="{{branch.branch_url}}" target="_blank"> {{branch.branch_name}}</a>
               </td>
               <td class="text-right small">
-                <a href="{{branch.build_url}}" target="_blank">{{branch.finished_at | fromNow}}</a>
+                <a href="{{branch.build_url}}" target="_blank">{{branch.finished_at || branch.started_at | fromNow}}</a>
               </td>
               
             </tr>
