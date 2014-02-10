@@ -15,9 +15,8 @@ func HookHandler(pusher *pusher.Client, r *http.Request, params martini.Params) 
 	channel := params["token"]
 
 	go func() {
-		fmt.Printf(string(body))
-
 		err := pusher.Publish(string(body), "build", channel)
+
 		PanicIf(err)
 	}()
 
