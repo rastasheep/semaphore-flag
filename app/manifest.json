@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Semaphore flag",
+  "description": "Lightweight client for Semaphore CI",
+  "version": "0.1",
+
+  "icons": {
+    "16": "/img/icon.png",
+    "32": "/img/icon.png",
+    "48": "/img/icon.png",
+    "128": "/img/icon.png"
+  },
+
+  "app": {
+    "background": {
+      "scripts": ["js/background.js"]
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "app.window",
+    "https://semaphoreapp.com/api/v1/",
+    "http://stats.pusher.com/timeline/1"
+  ]
+}

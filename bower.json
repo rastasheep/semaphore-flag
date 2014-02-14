@@ -1,0 +1,31 @@
+{
+  "name": "semaphore-flag",
+  "version": "0.0.1",
+  "homepage": "https://github.com/rastasheep/semaphore-flag",
+  "authors": [
+    "Aleksandar Diklic <rastasheep3@gmail.com>"
+  ],
+  "description": "Lightweight client for Semaphore CI",
+  "keywords": [
+    "semaphore",
+    "ci",
+    "client"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "~1.2.12",
+    "angular-ui-bootstrap-bower": "~0.10.0",
+    "pusher": "~2.1.6",
+    "moment": "~2.5.1",
+    "angular": "~1.2.12"
+  }
+}
