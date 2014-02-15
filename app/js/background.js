@@ -11,7 +11,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
   var width = 400;
   var height = 600;
 
-  chrome.app.window.create('../index.html', {
+  chrome.app.window.create("../index.html", {
     id: "appID",
     bounds: {
       width: width,
