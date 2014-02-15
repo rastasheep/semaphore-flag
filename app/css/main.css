@@ -9,14 +9,15 @@ body {
   overflow: auto;
 }
 
-.container{
+.main{
   min-height: 100%;
   height: auto;
   margin: 0 auto -70px;
   padding: 0 0 70px;
+  overflow: hidden;
 }
 .token-label{
-  padding: 40px;
+  padding: 70px 40px 40px;
   text-align: left;
   font-weight: bold;
   color:#999;
@@ -47,13 +48,11 @@ body {
 }
 .logo{width: 70px;}
 .loading{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  content: "";
-  opacity: 0.6;
-  background: transparent url("../img/icon.png") no-repeat center center;
-  z-index: -1;
+    font-size: 160px;
+    display: block !important;
+    text-align: center;
+    line-height: 3.3 !important;
+    opacity: 0.6;
 }
 .spin{
   -webkit-animation: infinite-spinning 2s infinite;
@@ -101,18 +100,26 @@ body {
 }
 .search-bar input{width: 76%; }
 
+.footer {border-bottom: 4px solid #8FB347;}
 .footer a{opacity: 0.3; }
 .footer a:hover{opacity: 1; }
+.footer div{padding: 20px 10px;}
 
 /* Override bootstrap stuff */
 
+.container{
+  padding-right: 0;
+  padding-left: 0;
+  max-width: 730px;
+  height: 100%;
+}
 .panel-title a {display: block; }
 .alert{
   position: absolute;
   width: 100%;
   -webkit-user-select: text;
   z-index:999;
-
+  text-align: center;
 }
 
 .table, .breadcrumb {
