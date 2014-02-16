@@ -85,8 +85,7 @@ angular.module("semaphoreFlag.services", [])
             q.resolve(data);
           })
           .error(function(data, status, headers, config) {
-            sharedData.removeToken();
-            q.reject("Wrong token, please try again.")
+            q.reject(status);
           });
         });
         return q.promise;

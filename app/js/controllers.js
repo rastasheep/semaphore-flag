@@ -148,11 +148,16 @@ angular.module("semaphoreFlag.controllers", [])
           $scope.working = false;
           $scope.refreshing = false;
         },
-        function(data) {
-          $rootScope.addAlert("danger", data);
-          $location.path("/");
+        function(status) {
+          if (status == 401) {
+            sharedData.removeToken();
+            $rootScope.addAlert("danger", "Wrong token, please try again." );
+            $location.path("/");
+          }else{
+            getProjects();
+          };
         }
-        );
+      );
     };
 
     $scope.showProject = function(project) {
