@@ -1,4 +1,4 @@
-<div class="loading spin" ng-show="working"></div>
+<i class="fa fa-cog fa-spin loading green" ng-show="working"></i>
 
 <alert ng-repeat="alert in getAlerts()"
        type="alert.type"
@@ -13,15 +13,15 @@
               ng-class="{true:'active'}[filterStared]"
               tooltip-placement="bottom"
               tooltip="Filter starred">
-        <i class="glyphicon"
-           ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty'}[filterStared]"></i>
+        <i class="fa"
+           ng-class="{true:'fa-star', false:'fa-star-o'}[filterStared]"></i>
       </button>
     <input class="input" 
            placeholder="Filter your projects" 
            type="text"
            ng-model="projectSearch.name">
       <button type="submit" class="btn btn-default" ng-click="refresh()" tooltip="Refresh" tooltip-placement="bottom">
-        <i class="glyphicon glyphicon-refresh" ng-class="{spin: refreshing}" disabled="refreshing"></i>
+        <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing}" disabled="refreshing"></i>
       </button>
   </div>
 
@@ -30,33 +30,33 @@
       <accordion-heading >
         <div ng-click="showProject(project)">
           {{project.owner}}/{{project.name}}
-          <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project.open, 'glyphicon-chevron-right': !project.open}"></i>
+          <i class="pull-right fa" ng-class="{'fa-chevron-down': project.open, 'fa-chevron-right': !project.open}"></i>
         </div>
       </accordion-heading>
 
       <ol class="breadcrumb text-center">
         <li>
-          <a href="#" tooltip-placement="bottom" tooltip="Toggle star"
+          <a href="#" tooltip-placement="bottom" tooltip="Star project"
              ng-click="toggleStar(project); $event.preventDefault()">
-            <i class="glyphicon"
-               ng-class="{true:'glyphicon-star', false:'glyphicon-star-empty gray'}[isStarred(project)]"></i>
+            <i class="fa"
+               ng-class="{true:'fa-star', false:'fa-star-o gray'}[isStarred(project)]"></i>
           </a>
         </li>
         <li>
           <a href="#" tooltip-placement="bottom" tooltip="Notifications"
              ng-click="toggleNotification(project); $event.preventDefault()">
-            <i class="glyphicon glyphicon-bell"
-               ng-class="{false:'gray'}[haveNotification(project)]"></i>
+            <i class="fa"
+               ng-class="{true: 'fa-bell', false:'fa-bell-o gray'}[haveNotification(project)]"></i>
           </a> 
         </li>
         <li>
           <a href="https://github.com/{{project.owner + '/' + project.name}}" tooltip-placement="bottom" target="_blank" tooltip="View on GitHub"> 
-            <i class="glyphicon glyphicon-cloud "></i>
+            <i class="fa fa-github"></i>
           </a> 
         </li>
         <li>
           <a href="#" tooltip-placement="bottom" target="_blank" tooltip="View on Semaphore"> 
-            <i class="glyphicon glyphicon-new-window"></i>
+            <i class="fa fa-gears"></i>
           </a> 
         </li>
       </ol>
