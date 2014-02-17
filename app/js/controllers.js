@@ -72,10 +72,10 @@ angular.module("semaphoreFlag.controllers", [])
         type: "basic",
         title: "Semaphore" + " [" + data["project_name"] + "]",
         message: "Build on '" + data["branch_name"] + "' branch " + data["result"]+ ".",
-        iconUrl: "images/" + data["result"] + ".png"
+        iconUrl: "../img/" + data["result"] + ".png"
       }
 
-      id = data["project_name"] + data["branch_name"] + data["build_number"]
+      var id = data["project_name"] + data["branch_name"] + data["build_number"]
 
       chrome.notifications.create(id, opt, function(){});
       chrome.notifications.onClicked.addListener(function(id){
