@@ -3,7 +3,8 @@
   "name": "Semaphore Flag",
   "description": "Lightweight client for Semaphore CI",
   "version": "0.1",
-
+  "offline_enabled": false,
+  
   "icons": {
     "16": "/img/icon.png",
     "32": "/img/icon.png",
