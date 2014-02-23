@@ -206,7 +206,7 @@ angular.module("semaphoreFlag.controllers", [])
         hookService.removeHook(project, $scope.notifications[index])
         .then( 
           function(){ 
-            var message = "Notifications for " + project.name + " are off.";
+            var message = "Notifications for '" + project.name + "' are off.";
             $rootScope.addAlert("success", message);
           },
           function(status) {
@@ -224,7 +224,7 @@ angular.module("semaphoreFlag.controllers", [])
         hookService.setHook(project)
         .then( 
           function(hook){ 
-            var message = "Notifications for " + project.name + " are now on."
+            var message = "Notifications for '" + project.name + "' are now on."
             $rootScope.addAlert("success", message);
             var notification = {
               hash_id: project.hash_id,
