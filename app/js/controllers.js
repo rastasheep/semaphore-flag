@@ -63,8 +63,8 @@ angular.module("semaphoreFlag.controllers", [])
         channel.bind("build", function(data) {
           var project = findProject(data["project_hash_id"])
           if ($scope.haveNotification(project)){
-            getProjects();
             showNotification(data, project);
+            getProjects();
           }
         });
       })
@@ -85,8 +85,8 @@ angular.module("semaphoreFlag.controllers", [])
 
       chrome.notifications.onClicked.addListener(function(id){
         $scope.$apply(function () {
-          $scope.notificationFor.open = true;
           $scope.openProjectHash = $scope.notificationFor.hash_id;
+          setOpenProject();
         });
         chrome.app.window.current().focus();
         chrome.notifications.clear(id, function(){})
