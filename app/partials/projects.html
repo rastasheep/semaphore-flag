@@ -28,7 +28,7 @@
   <accordion close-others="true">
     <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filterStarred:this | filter:projectSearch | limitTo: pageLimit() )' is-open="project.open" >
       <accordion-heading >
-        <div ng-click="showProject(project)">
+        <div ng-click="toggleOpenProject(project.hash_id)">
           {{project.owner}}/{{project.name}}
           <i class="pull-right fa" ng-class="{'fa-chevron-down': project.open, 'fa-chevron-right': !project.open}"></i>
         </div>
@@ -67,10 +67,14 @@
             <tr class="{{branch.result}} branch" ng-repeat="branch in project.branches | orderBy:'branch_name'">
 
               <td>
-                <a href="{{branch.branch_url}}" target="_blank"> {{branch.branch_name}}</a>
+                <a href="{{branch.branch_url}}" target="_blank">
+                  {{branch.branch_name}}
+                </a>
               </td>
               <td class="text-right small">
-                <a href="{{branch.build_url}}" target="_blank">{{branch.finished_at || branch.started_at | fromNow}}</a>
+                <a href="{{branch.build_url}}" target="_blank">
+                  {{branch.finished_at || branch.started_at | fromNow}}
+                </a>
               </td>
               
             </tr>
@@ -86,7 +90,9 @@
 
     <figure ng-hide="filteredProjects.length">
       <h1 class="token-label">
-        Project </br>you seek </br>can't be located.
+        Project </br>
+        you seek </br>
+        can't be located.
       </h1>
     </figure>
 

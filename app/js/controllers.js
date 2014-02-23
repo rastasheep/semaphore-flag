@@ -76,13 +76,23 @@ angular.module("semaphoreFlag.controllers", [])
       }
 
       var id = data["project_name"] + data["branch_name"] + data["build_number"]
+      $scope.notificationFor = data["project_hash_id"]
 
       chrome.notifications.create(id, opt, function(){});
+
       chrome.notifications.onClicked.addListener(function(id){
+        $scope.$apply(function () {
+          $scope.openProjectHash = $scope.notificationFor;
+          findProject($scope.openProjectHash).open = true;
+        });
         chrome.app.window.current().focus();
         chrome.notifications.clear(id, function(){})
       });
     };
+
+    var findProject = function(hash_id){
+      return $scope.projects.filter(function(obj){return obj.hash_id == hash_id })[0];
+    }
 
     var init = function() {
       getStarFilter();
@@ -132,10 +142,7 @@ angular.module("semaphoreFlag.controllers", [])
 
     var setOpenProject = function() {
       if($scope.openProjectHash != null){
-        var proj = $scope.projects.filter(function(obj){
-          return obj.hash_id == $scope.openProjectHash
-        })[0];
-        proj.open = true;
+        findProject($scope.openProjectHash).open = true
       }
     }
 
@@ -160,11 +167,11 @@ angular.module("semaphoreFlag.controllers", [])
       );
     };
 
-    $scope.showProject = function(project) {
-      if ($scope.openProjectHash == project.hash_id){
+    $scope.toggleOpenProject = function(projectHashId) {
+      if ($scope.openProjectHash == projectHashId){
         $scope.openProjectHash = null;
       } else {
-        $scope.openProjectHash = project.hash_id;
+        $scope.openProjectHash = projectHashId;
       };
     };
 
