@@ -61,13 +61,16 @@ angular.module("semaphoreFlag.controllers", [])
         var channel = pusher.subscribe(value);
 
         channel.bind("build", function(data) {
-          getProjects();
-          showNotification(data);
+          var project = findProject(data["project_hash_id"])
+          if ($scope.haveNotification(project)){
+            getProjects();
+            showNotification(data, project);
+          }
         });
       })
     };
 
-    var showNotification = function(data){
+    var showNotification = function(data, project){
       var opt = {
         type: "basic",
         title: "Semaphore" + " [" + data["project_name"] + "]",
@@ -76,14 +79,14 @@ angular.module("semaphoreFlag.controllers", [])
       }
 
       var id = data["project_name"] + data["branch_name"] + data["build_number"]
-      $scope.notificationFor = data["project_hash_id"]
+      $scope.notificationFor = project;
 
       chrome.notifications.create(id, opt, function(){});
 
       chrome.notifications.onClicked.addListener(function(id){
         $scope.$apply(function () {
-          $scope.openProjectHash = $scope.notificationFor;
-          findProject($scope.openProjectHash).open = true;
+          $scope.notificationFor.open = true;
+          $scope.openProjectHash = $scope.notificationFor.hash_id;
         });
         chrome.app.window.current().focus();
         chrome.notifications.clear(id, function(){})
@@ -212,8 +215,11 @@ angular.module("semaphoreFlag.controllers", [])
     };
 
     $scope.haveNotification = function(project) {
-      var index = $scope.notifications.indexOf(project.hash_id);
-      return (index > -1) ? true : false
+      if (project != null){
+        var index = $scope.notifications.indexOf(project.hash_id);
+        return (index > -1) ? true : false;
+      }
+      return false;
     };
 
 
