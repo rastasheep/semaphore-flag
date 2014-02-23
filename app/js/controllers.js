@@ -78,14 +78,13 @@ angular.module("semaphoreFlag.controllers", [])
         iconUrl: "../img/" + data["result"] + ".png"
       }
 
-      var id = data["project_name"] + data["branch_name"] + data["build_number"]
-      $scope.notificationFor = project;
+      var id = data["project_hash_id"] + "/" + data["branch_name"] + "/" + data["build_number"]
 
       chrome.notifications.create(id, opt, function(){});
 
       chrome.notifications.onClicked.addListener(function(id){
         $scope.$apply(function () {
-          $scope.openProjectHash = $scope.notificationFor.hash_id;
+          $scope.openProjectHash = id.split('/')[0];
           setOpenProject();
         });
         chrome.app.window.current().focus();
