@@ -2,7 +2,7 @@
 
 angular.module("semaphoreFlag.services", [])
 
-.value("base_url", "https://semaphoreapp.com/api/v1/projects?auth_token=")
+.value("base_url", "https://semaphoreapp.com/api/v1/projects")
 
 .service("sharedData", ["$q",
   function ($q) {
@@ -79,7 +79,7 @@ angular.module("semaphoreFlag.services", [])
 
         sharedData.getToken()
         .then( function(value){
-          var url = base_url + value;
+          var url = base_url + "?auth_token=" + value;
           $http.get(url)
           .success(function(data) {
             q.resolve(data);
@@ -92,4 +92,48 @@ angular.module("semaphoreFlag.services", [])
       } 
     };
   }
+])
+
+.service("hookService", [ "$q", "$http", "sharedData", "base_url",
+  function ($q, $http, sharedData, base_url) {
+    return {
+      setHook:function(project){
+        var q = $q.defer();
+
+        sharedData.getToken()
+        .then( function(token){
+          var url = base_url + "/" + project.hash_id + "/hooks?auth_token=" + token;
+          var data = {
+            "url": "http://semaphoreflag.herokuapp.com/" + token,
+            "hook_type": "post_build"
+          }
+          $http.post(url, data)
+          .success(function(data) {
+            q.resolve(data);
+          })
+          .error(function(data, status, headers, config) {
+            q.reject(status);
+          });
+        });
+        return q.promise;
+      },
+      removeHook:function(project, hook){
+        var q = $q.defer();
+
+        sharedData.getToken()
+        .then( function(token){
+          var url = base_url + "/" + project.hash_id + "/hooks/" + hook.hook_id + "?auth_token=" + token;
+          $http.delete(url)
+          .success(function(data) {
+            q.resolve(data);
+          })
+          .error(function(data, status, headers, config) {
+            q.reject(status);
+          });
+        });
+        return q.promise;
+      } 
+    };
+  }
 ]);
+

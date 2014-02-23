@@ -34,8 +34,8 @@ angular.module("semaphoreFlag.controllers", [])
   }
 ])
 
-.controller("projectsController", [ "$rootScope", "$scope", "$location", "$timeout", "projectService", "sharedData",
-  function($rootScope, $scope, $location, $timeout, projectService, sharedData) {
+.controller("projectsController", [ "$rootScope", "$scope", "$location", "$timeout", "projectService", "hookService", "sharedData",
+  function($rootScope, $scope, $location, $timeout, projectService, hookService, sharedData) {
 
     $scope.working = true;
     $scope.morePages = true;
@@ -170,11 +170,11 @@ angular.module("semaphoreFlag.controllers", [])
       );
     };
 
-    $scope.toggleOpenProject = function(projectHashId) {
-      if ($scope.openProjectHash == projectHashId){
+    $scope.toggleOpenProject = function(hash_id) {
+      if ($scope.openProjectHash == hash_id){
         $scope.openProjectHash = null;
       } else {
-        $scope.openProjectHash = projectHashId;
+        $scope.openProjectHash = hash_id;
       };
     };
 
@@ -185,43 +185,80 @@ angular.module("semaphoreFlag.controllers", [])
 
     $scope.toggleStar = function(project){
       if ($scope.isStarred(project)) {
-        $scope.starred.splice($scope.starred.indexOf(project.hash_id), 1);
+        $scope.starred.splice(findStarIndex(project), 1);
       }else{
         $scope.starred.push(project.hash_id);
       };
       sharedData.setStarred($scope.starred);
     };
 
+    var findStarIndex = function(project) {
+      return $scope.starred.indexOf(project.hash_id)
+    };
+
+    var findNotificationIndex = function(project){
+      return $scope.notifications.map(function(e) { return e.hash_id; }).indexOf(project.hash_id)
+    }
+
     $scope.toggleNotification = function(project){
       if ($scope.haveNotification(project)) {
-        var message = "Please remove webhook from " + project["name"]
-        $rootScope.addAlert("success", message);
+        var index = findNotificationIndex(project);
 
-        $scope.notifications.splice($scope.notifications.indexOf(project.hash_id), 1);
+        hookService.removeHook(project, $scope.notifications[index])
+        .then( 
+          function(){ 
+            var message = "Notifications for " + project.name + " are off.";
+            $rootScope.addAlert("success", message);
+          },
+          function(status) {
+            var message = "There was error (" + status + ") \
+                          while removing webhook on Semaphore, \
+                          remove remove manually.";
+            $rootScope.addAlert("danger", message);
+          }
+        )
+
+        $scope.notifications.splice(index , 1);
+        sharedData.setNotifications($scope.notifications);
+
       }else{
-        var message = "http://semaphoreflag.herokuapp.com/" +  token
-        $rootScope.addAlert("success", message);
-
-        $scope.notifications.splice($scope.notifications.indexOf(project.hash_id), 1);
-        $scope.notifications.push(project.hash_id);
+        hookService.setHook(project)
+        .then( 
+          function(hook){ 
+            var message = "Notifications for " + project.name + " are now on."
+            $rootScope.addAlert("success", message);
+            var notification = {
+              hash_id: project.hash_id,
+              hook_id: hook.id
+            }
+            $scope.notifications.push(notification);
+            sharedData.setNotifications($scope.notifications);
+          },
+          function(status) {
+            var message = "There was error (" + status + ") \
+                          while creating webhook \
+                          please try again later."
+            $rootScope.addAlert("danger", message);
+          }
+        )
       };
-      sharedData.setNotifications($scope.notifications);
     };
-
 
     $scope.isStarred = function(project) {
-      var index = $scope.starred.indexOf(project.hash_id);
-      return (index > -1) ? true : false
-    };
-
-    $scope.haveNotification = function(project) {
       if (project != null){
-        var index = $scope.notifications.indexOf(project.hash_id);
-        return (index > -1) ? true : false;
+        var index = findStarIndex(project);
+        return (index > -1) ? true : false
       }
       return false;
     };
 
+    $scope.haveNotification = function(project) {
+      if (project != null){
+        var index = findNotificationIndex(project);
+        return ( index > -1) ? true : false;
+      }
+      return false;
+    };
 
     $scope.refresh = function() {
       $scope.refreshing = true;
