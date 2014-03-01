@@ -13,7 +13,7 @@ body {
 .main{
   min-height: 100%;
   height: auto;
-  margin: 0 auto -70px;
+  margin: 0 auto -30px;
   padding: 0 0 70px;
   overflow: hidden;
 }
@@ -110,7 +110,7 @@ body {
 
 .footer .logo{opacity: 0.3; }
 .footer .logo:hover{opacity: 1; }
-.footer div{padding: 20px 10px;}
+.footer div{padding: 10px;}
 
 /* Override bootstrap stuff */
 
@@ -119,6 +119,8 @@ body {
  max-width: 730px;
  height: 100%;
 }
+
+.panel {border-radius: 0 !important;}
 .panel-heading {
   padding: 10px;
   background-color: #F2F2E9 !important;
@@ -137,7 +139,8 @@ body {
 
 .table, .breadcrumb {
   margin-bottom: 0 !important;
-    background-color: #F2F2E9 !important;
+  background-color: #F2F2E9 !important;
+  border-radius: 0;
 }
 
 .btn-default.active {
@@ -173,12 +176,12 @@ nav{
   z-index: 99;
 }
 nav h1{
-  text-align: right;
   font-size: 13px;
   position: relative;
-  top: -20px;
-  margin: 0;
+  margin: 2px 2px 3px 2px;
   z-index: 999;
+  display: inline-block;
+  float: right;
 }
 .nav-btn {
   display: inline-block;
