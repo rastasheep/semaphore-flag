@@ -97,6 +97,7 @@ angular.module("semaphoreFlag.controllers", [])
     }
 
     var init = function() {
+      $rootScope.isProjectsCtrl = true;
       getStarFilter();
       getStarred();
       getNotifications();
@@ -292,5 +293,13 @@ angular.module("semaphoreFlag.controllers", [])
 
 .controller("offlineController",[
   function() {
+  }
+])
+
+.controller("navigationController",[ "$rootScope", "$scope",
+  function($rootScope, $scope) {
+    $scope.isProjectsCtrl = function() {
+      return $rootScope.isProjectsCtrl;
+    };
   }
 ]);

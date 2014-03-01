@@ -13,6 +13,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
 
   chrome.app.window.create("../index.html", {
     id: "appID",
+    frame: "none",
     bounds: {
       width: width,
       height: height,
@@ -20,7 +21,8 @@ chrome.app.runtime.onLaunched.addListener(function() {
       top: Math.round((screenHeight-height)/2)
     },
     minWidth: width,
+    maxWidth: width,
     minHeight: height,
   });
-  
+
 });
