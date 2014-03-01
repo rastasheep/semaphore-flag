@@ -15,8 +15,8 @@
       <a href="#" class="nav-btn nav-close"></a>
       <a href="#" class="nav-btn nav-minimize"></a>
       <a href="#" class="nav-btn nav-maximize"></a>
-      <h1 ng-show="isProjectsCtrl()" ng-click="projectsController.refresh()"  style="text-align: right; font-size: 11px;">
-        <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing}" disabled="refreshing" tooltip="Refresh" tooltip-placement="left"></i>
+      <h1 ng-show="isProjectsCtrl()" ng-click="refresh()">
+        <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing()}" disabled="refreshing()" tooltip="Refresh" tooltip-placement="left"></i>
       </h1>
     </nav>
 

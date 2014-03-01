@@ -156,7 +156,7 @@ angular.module("semaphoreFlag.controllers", [])
           $scope.projects = value;
           setOpenProject();
           $scope.working = false;
-          $scope.refreshing = false;
+          $rootScope.refreshing = false;
         },
         function(status) {
           if (status == 401) {
@@ -260,10 +260,10 @@ angular.module("semaphoreFlag.controllers", [])
       return false;
     };
 
-    $scope.refresh = function() {
-      $scope.refreshing = true;
+    $rootScope.$on("needRefresh", function() {
+      $rootScope.refreshing = true;
       getProjects();
-    };
+    });
 
     $scope.pageLimit = function() {
       return pageSize * pagesShown;
@@ -298,8 +298,18 @@ angular.module("semaphoreFlag.controllers", [])
 
 .controller("navigationController",[ "$rootScope", "$scope",
   function($rootScope, $scope) {
+
     $scope.isProjectsCtrl = function() {
       return $rootScope.isProjectsCtrl;
     };
+
+    $scope.refresh = function() {
+      $rootScope.$emit("needRefresh");
+    };
+
+    $scope.refreshing = function(){
+      return $rootScope.refreshing;
+    };
+    
   }
 ]);

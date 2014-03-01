@@ -168,10 +168,11 @@ nav{
 }
 nav h1{
   text-align: right;
-  font-size: 11px;
+  font-size: 13px;
   position: relative;
   top: -20px;
   margin: 0;
+  z-index: 999;
 }
 .nav-btn {
   display: inline-block;
