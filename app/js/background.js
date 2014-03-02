@@ -9,6 +9,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
   var screenWidth = screen.availWidth;
   var screenHeight = screen.availHeight;
   var width = 400;
+  var maxWidth = 730;
   var height = 600;
 
   chrome.app.window.create("../index.html", {
@@ -21,7 +22,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
       top: Math.round((screenHeight-height)/2)
     },
     minWidth: width,
-    maxWidth: width,
+    maxWidth: maxWidth,
     minHeight: height,
   });
 

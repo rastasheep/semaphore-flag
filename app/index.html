@@ -12,11 +12,12 @@
   <body class="window">
 
     <nav ng-controller="navigationController">
-      <a href="#" class="nav-btn nav-close"></a>
-      <a href="#" class="nav-btn nav-minimize"></a>
-      <a href="#" class="nav-btn nav-maximize"></a>
+      <a ng-click="close()" class="nav-btn nav-close"></a>
+      <a ng-click="minimize()" class="nav-btn nav-minimize"></a>
+      <a ng-click="setOnTop()" class="nav-btn nav-maximize"></a>
       <h1 ng-show="isProjectsCtrl()" ng-click="refresh()">
-        <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing()}" disabled="refreshing()" tooltip="Refresh" tooltip-placement="left"></i>
+        <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing()}" disabled="refreshing()"
+           tooltip="Refresh" tooltip-placement="left"></i>
       </h1>
     </nav>
 

@@ -6,6 +6,7 @@ angular.module("semaphoreFlag.controllers", [])
   function($rootScope, $scope, $location, sharedData) {
 
     var init = function() {
+      $rootScope.isProjectsCtrl = false;
       if ($rootScope.onLine){
         sharedData.getToken().then( function(value){
           if (value)
@@ -291,8 +292,9 @@ angular.module("semaphoreFlag.controllers", [])
   }
 ])
 
-.controller("offlineController",[
-  function() {
+.controller("offlineController",["$rootScope",
+  function($rootScope) {
+        $rootScope.isProjectsCtrl = false;
   }
 ])
 
@@ -310,6 +312,25 @@ angular.module("semaphoreFlag.controllers", [])
     $scope.refreshing = function(){
       return $rootScope.refreshing;
     };
-    
+
+    $scope.minimize = function(){
+      chrome.app.window.current().minimize();
+    };
+
+    $scope.setOnTop= function(){
+      var app = chrome.app.window.current();
+      var bounds = app.getBounds();
+
+      if(bounds.height == screen.availHeight){
+        app.resizeTo(400, 600)
+      }else{
+        app.resizeTo(400, screen.availHeight)
+      }
+    };
+
+    $scope.close = function(){
+      chrome.app.window.current().close();
+    };
+
   }
 ]);
