@@ -14,15 +14,15 @@
     <nav ng-controller="navigationController">
       <a ng-click="close()" class="nav-btn nav-close"></a>
       <a ng-click="minimize()" class="nav-btn nav-minimize"></a>
-      <a ng-click="setOnTop()" class="nav-btn nav-maximize"></a>
+      <a ng-click="maximize()" class="nav-btn nav-maximize"></a>
       <h1 ng-show="isProjectsCtrl()" ng-click="refresh()">
         <i class="fa fa-refresh" ng-class="{'fa-spin': refreshing()}" disabled="refreshing()"
            tooltip="Refresh" tooltip-placement="left"></i>
       </h1>
     </nav>
 
-
     <div class="container">
+
       <div ng-view class="main"></div>
 
       <div class="footer text-center">
@@ -33,6 +33,7 @@
           <a href="https://github.com/rastasheep/semaphore-flag" class="small" target="_blank">Docs & code.</a>
         </div>
       </div>
+      
     </div>
 
     <script src="lib/angular/angular.min.js"></script>

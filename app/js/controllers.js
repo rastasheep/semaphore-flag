@@ -150,7 +150,7 @@ angular.module("semaphoreFlag.controllers", [])
       }
     }
 
-    var getProjects = function(){
+    var getProjects = function() {
       projectService.getProjects()
       .then( 
         function(value){ 
@@ -289,7 +289,7 @@ angular.module("semaphoreFlag.controllers", [])
 
 .controller("offlineController",["$rootScope",
   function($rootScope) {
-        $rootScope.isProjectsCtrl = false;
+    $rootScope.isProjectsCtrl = false;
   }
 ])
 
@@ -312,7 +312,7 @@ angular.module("semaphoreFlag.controllers", [])
       chrome.app.window.current().minimize();
     };
 
-    $scope.setOnTop= function(){
+    $scope.maximize= function(){
       var app = chrome.app.window.current();
       var bounds = app.getBounds();
 
