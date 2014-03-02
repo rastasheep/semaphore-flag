@@ -207,10 +207,7 @@ angular.module("semaphoreFlag.controllers", [])
 
         hookService.removeHook(project, $scope.notifications[index])
         .then( 
-          function(){ 
-            var message = "Notifications for '" + project.name + "' are off.";
-            $rootScope.addAlert("success", message);
-          },
+          function(){},
           function(status) {
             var message = "There was error (" + status + ") \
                           while removing webhook on Semaphore, \
@@ -226,8 +223,6 @@ angular.module("semaphoreFlag.controllers", [])
         hookService.setHook(project)
         .then( 
           function(hook){ 
-            var message = "Notifications for '" + project.name + "' are now on."
-            $rootScope.addAlert("success", message);
             var notification = {
               hash_id: project.hash_id,
               hook_id: hook.id
