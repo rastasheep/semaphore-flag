@@ -6,6 +6,7 @@ angular.module("semaphoreFlag.controllers", [])
   function($rootScope, $scope, $location, sharedData) {
 
     var init = function() {
+      $rootScope.isProjectsCtrl = false;
       if ($rootScope.onLine){
         sharedData.getToken().then( function(value){
           if (value)
@@ -73,8 +74,9 @@ angular.module("semaphoreFlag.controllers", [])
     var showNotification = function(data, project){
       var opt = {
         type: "basic",
-        title: "Semaphore" + " [" + data["project_name"] + "]",
-        message: "Build on '" + data["branch_name"] + "' branch " + data["result"]+ ".",
+        title: "Build #" + data["build_number"] + " " + data["result"],
+        message: "[" + data["project_name"] + " / " + data["branch_name"] + "]: " + "\n\n" +
+                 data["commit"]["message"].split("\n").shift() + " - " + data["commit"]["author_name"],
         iconUrl: "../img/" + data["result"] + ".png"
       }
 
@@ -97,6 +99,7 @@ angular.module("semaphoreFlag.controllers", [])
     }
 
     var init = function() {
+      $rootScope.isProjectsCtrl = true;
       getStarFilter();
       getStarred();
       getNotifications();
@@ -148,14 +151,14 @@ angular.module("semaphoreFlag.controllers", [])
       }
     }
 
-    var getProjects = function(){
+    var getProjects = function() {
       projectService.getProjects()
       .then( 
         function(value){ 
           $scope.projects = value;
           setOpenProject();
           $scope.working = false;
-          $scope.refreshing = false;
+          $rootScope.refreshing = false;
         },
         function(status) {
           if (status == 401) {
@@ -205,10 +208,7 @@ angular.module("semaphoreFlag.controllers", [])
 
         hookService.removeHook(project, $scope.notifications[index])
         .then( 
-          function(){ 
-            var message = "Notifications for '" + project.name + "' are off.";
-            $rootScope.addAlert("success", message);
-          },
+          function(){},
           function(status) {
             var message = "There was error (" + status + ") \
                           while removing webhook on Semaphore, \
@@ -224,8 +224,6 @@ angular.module("semaphoreFlag.controllers", [])
         hookService.setHook(project)
         .then( 
           function(hook){ 
-            var message = "Notifications for '" + project.name + "' are now on."
-            $rootScope.addAlert("success", message);
             var notification = {
               hash_id: project.hash_id,
               hook_id: hook.id
@@ -259,10 +257,10 @@ angular.module("semaphoreFlag.controllers", [])
       return false;
     };
 
-    $scope.refresh = function() {
-      $scope.refreshing = true;
+    $rootScope.$on("needRefresh", function() {
+      $rootScope.refreshing = true;
       getProjects();
-    };
+    });
 
     $scope.pageLimit = function() {
       return pageSize * pagesShown;
@@ -290,7 +288,45 @@ angular.module("semaphoreFlag.controllers", [])
   }
 ])
 
-.controller("offlineController",[
-  function() {
+.controller("offlineController",["$rootScope",
+  function($rootScope) {
+    $rootScope.isProjectsCtrl = false;
+  }
+])
+
+.controller("navigationController",[ "$rootScope", "$scope",
+  function($rootScope, $scope) {
+
+    $scope.isProjectsCtrl = function() {
+      return $rootScope.isProjectsCtrl;
+    };
+
+    $scope.refresh = function() {
+      $rootScope.$emit("needRefresh");
+    };
+
+    $scope.refreshing = function(){
+      return $rootScope.refreshing;
+    };
+
+    $scope.minimize = function(){
+      chrome.app.window.current().minimize();
+    };
+
+    $scope.maximize= function(){
+      var app = chrome.app.window.current();
+      var bounds = app.getBounds();
+
+      if(bounds.height == screen.availHeight){
+        app.resizeTo(400, 600)
+      }else{
+        app.resizeTo(400, screen.availHeight)
+      }
+    };
+
+    $scope.close = function(){
+      chrome.app.window.current().close();
+    };
+
   }
 ]);

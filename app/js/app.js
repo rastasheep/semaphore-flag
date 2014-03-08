@@ -31,6 +31,11 @@ angular.module("semaphoreFlag", [
       $rootScope.alerts.splice(index, 1);
     };
 
+   $rootScope.$on('$routeChangeSuccess', function(ev,data) {   
+     if (data.$route && data.$route.controller)
+       $rootScope.controller = data.$route.controller;
+   })
+
     $window.addEventListener("online", function () {
       $rootScope.onLine = true;
       $timeout(function() { $location.path("/projects") }, 10000);
@@ -42,5 +47,10 @@ angular.module("semaphoreFlag", [
       $location.path("/offline");
       $rootScope.$digest();
     });
+
+
+    window.onfocus = function (){document.body.className = (""); };
+    window.onblur = function (){document.body.className = ("blur"); };
+
   }
 ]);
