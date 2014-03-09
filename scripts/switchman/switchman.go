@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/codegangsta/martini"
 	"github.com/timonv/pusher"
 	"io/ioutil"
