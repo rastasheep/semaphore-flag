@@ -43,7 +43,7 @@ func main() {
 	m.Post("/:token", HookHandler)
 
 	m.Get("/", func() string {
-		return "Hello world!"
+		return "i'm a switchman"
 	})
 
 	m.Run()
