@@ -136,4 +136,3 @@ angular.module("semaphoreFlag.services", [])
     };
   }
 ]);
-

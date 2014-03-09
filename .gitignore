@@ -1,5 +1,9 @@
+node_modules
 app/lib
+app/js/app.js
+app/js/app.min.js
 
 .DS_Store
+npm-debug.log
 semaphore-flag.crx
 semaphore-flag.pem
