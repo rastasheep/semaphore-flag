@@ -67,6 +67,7 @@
             <tr class="{{branch.result}} branch" ng-repeat="branch in project.branches | orderBy:'branch_name'">
 
               <td>
+                <i class="fa fa-angle-double-right" ng-show="branch.branch_name == 'master'"></i>
                 <a href="{{branch.branch_url}}" target="_blank">
                   {{branch.branch_name}}
                 </a>
