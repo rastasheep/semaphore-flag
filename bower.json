@@ -26,6 +26,7 @@
     "angular-ui-bootstrap-bower": "~0.10.0",
     "pusher": "~2.1.6",
     "moment": "~2.5.1",
-    "angular": "~1.2.12"
+    "angular": "~1.2.12",
+    "js-md5": "~1.1.0"
   }
 }

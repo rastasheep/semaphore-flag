@@ -59,7 +59,7 @@ angular.module("semaphoreFlag.controllers", [])
       sharedData.getToken()
       .then( function(value){
         token = value
-        var channel = pusher.subscribe(value);
+        var channel = pusher.subscribe(md5(token, "flag"));
 
         channel.bind("build", function(data) {
           var project = findProject(data["project_hash_id"])

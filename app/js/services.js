@@ -104,7 +104,7 @@ angular.module("semaphoreFlag.services", [])
         .then( function(token){
           var url = base_url + "/" + project.hash_id + "/hooks?auth_token=" + token;
           var data = {
-            "url": "http://semaphoreflag.herokuapp.com/" + token,
+            "url": "http://semaphoreflag.herokuapp.com/" + md5(token, "flag"),
             "hook_type": "post_build"
           }
           $http.post(url, data)
