@@ -76,7 +76,7 @@ angular.module("semaphoreFlag.controllers", [])
         type: "basic",
         title: "Build #" + data["build_number"] + " " + data["result"],
         message: "[" + data["project_name"] + " / " + data["branch_name"] + "]: " + "\n\n" +
-                 data["commit"]["message"].split("\n").shift() + " - " + data["commit"]["author_name"],
+                 data["commit"]["message"].split("\n").shift() + "\n- " + data["commit"]["author_name"],
         iconUrl: "../img/" + data["result"] + ".png"
       }
 
