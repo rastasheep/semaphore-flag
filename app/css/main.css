@@ -27,7 +27,7 @@ body {
 .green{color: #8FB347;}
 
 .input{
-  padding: 6px 12px;
+  padding: 6px 20px;
   color: #555;
   vertical-align: middle;
   border: 1px solid #CCC;
@@ -116,6 +116,11 @@ body {
   position: absolute;
   z-index: 96;
 }
+.search-bar-clear{
+  position: absolute;
+  top: 16px;
+  right: 16px; 
+}
 
 .footer .logo{opacity: 0.3; }
 .footer .logo:hover{opacity: 1; }
@@ -123,7 +128,10 @@ body {
 
 /* Override bootstrap stuff */
 
-a {color: #999; }
+a {
+ color: #999;
+ cursor:pointer;
+}
 a:hover {color: #333; }
 
 .container{

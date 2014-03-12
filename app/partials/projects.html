@@ -20,6 +20,9 @@
            placeholder="Filter projects" 
            type="text"
            ng-model="projectSearch.name">
+    <a class="search-bar-clear" ng-click="projectSearch.name = ''">
+      <i class="fa fa-times" ng-show="projectSearch.name"></i>
+    </a>
   </div>
 
   <accordion close-others="true">
@@ -33,15 +36,15 @@
 
       <ol class="breadcrumb text-center">
         <li>
-          <a href="#" tooltip-placement="bottom" tooltip="Star project"
-             ng-click="toggleStar(project); $event.preventDefault()">
+          <a tooltip-placement="bottom" tooltip="Star project"
+             ng-click="toggleStar(project)">
             <i class="fa"
                ng-class="{true:'fa-star', false:'fa-star-o gray'}[isStarred(project)]"></i>
           </a>
         </li>
         <li>
-          <a href="#" tooltip-placement="bottom" tooltip="Notifications"
-             ng-click="toggleNotification(project); $event.preventDefault()">
+          <a tooltip-placement="bottom" tooltip="Notifications"
+             ng-click="toggleNotification(project)">
             <i class="fa"
                ng-class="{true: 'fa-bell', false:'fa-bell-o gray'}[haveNotification(project)]"></i>
           </a> 
