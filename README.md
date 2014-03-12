@@ -1,4 +1,4 @@
-# Semaphore flag
+# Semaphore Flag
 
 Lightweight client for Semaphore CI
 

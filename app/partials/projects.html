@@ -7,15 +7,15 @@
 <div ng-hide="working">
 
   <div class="search-bar text-center">
-      <button type="submit" 
-              ng-click="toggleStarFilter()"
-              class="btn btn-default"
-              ng-class="{true:'active'}[filterStared]"
-              tooltip-placement="bottom"
-              tooltip="Filter starred">
-        <i class="fa"
-           ng-class="{true:'fa-star', false:'fa-star-o'}[filterStared]"></i>
-      </button>
+    <button type="submit" 
+            ng-click="toggleStarFilter()"
+            class="btn btn-default"
+            ng-class="{true:'active'}[filterStared]"
+            tooltip-placement="bottom"
+            tooltip="Filter starred">
+      <i class="fa"
+         ng-class="{true:'fa-star', false:'fa-star-o'}[filterStared]"></i>
+    </button>
     <input class="input" 
            placeholder="Filter projects" 
            type="text"
@@ -27,10 +27,12 @@
 
   <accordion close-others="true">
     <accordion-group ng-repeat='project in $parent.filteredProjects = ( projects | filterStarred:this | filter:projectSearch | limitTo: pageLimit() )' is-open="project.open" >
+
       <accordion-heading >
         <div ng-click="toggleOpenProject(project.hash_id)">
           {{project.owner}} / {{project.name}}
-          <i class="pull-right fa" ng-class="{'fa-chevron-down': project.open, 'fa-chevron-right': !project.open}"></i>
+          <i class="pull-right fa"
+             ng-class="{'fa-chevron-down': project.open, 'fa-chevron-right': !project.open}"></i>
         </div>
       </accordion-heading>
 
@@ -50,7 +52,8 @@
           </a> 
         </li>
         <li>
-          <a href="https://github.com/{{project.owner + '/' + project.name}}" tooltip-placement="bottom" target="_blank" tooltip="View on GitHub"> 
+          <a href="https://github.com/{{project.owner + '/' + project.name}}" target="_blank"
+             tooltip-placement="bottom" tooltip="View on GitHub"> 
             <i class="fa fa-github"></i>
           </a> 
         </li>
@@ -60,14 +63,14 @@
           </a> 
         </li>
       </ol>
-      </ol>
 
       <table class="table">
           <tbody>
-            <tr class="{{branch.result}} branch" ng-repeat="branch in project.branches | orderBy:'branch_name'">
+            <tr class="{{branch.result}} branch"
+                ng-repeat="branch in project.branches | orderBy:'branch_name'">
 
               <td>
-                <i class="fa fa-angle-double-right" ng-show="branch.branch_name == 'master'"></i>
+                <i class="fa fa-angle-right" ng-show="branch.branch_name == 'master'"></i>
                 <a href="{{branch.branch_url}}" target="_blank">
                   {{branch.branch_name}}
                 </a>
@@ -105,4 +108,5 @@
             ng-show="morePages"
             ng-click="nextPage()"> Show more</button>
   </div>
+
 </div>
