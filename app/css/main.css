@@ -13,7 +13,7 @@ body {
 .main{
   min-height: 100%;
   height: auto;
-  margin: 0 auto -30px;
+  margin: 0 auto -25px;
   padding: 0 0 70px;
   overflow: hidden;
 }
@@ -124,7 +124,7 @@ body {
 
 .footer .logo{opacity: 0.3; }
 .footer .logo:hover{opacity: 1; }
-.footer div{padding: 10px;}
+.footer div{padding: 15px;}
 
 /* Override bootstrap stuff */
 
