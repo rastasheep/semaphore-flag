@@ -67,14 +67,36 @@ app.controller 'projectsController', ['$rootScope', '$scope', '$location', '$tim
 
       return
 
-    showNotification = (data, project) ->
+    notificationTemplate = (data) ->
+      if data['event'] == 'deploy'
+        location  = data["branch_name"]
+        evet_info =  "Deploy ##{data['number']}"
+      else
+        location  = data["branch_name"]
+        evet_info =  "Build ##{data['build_number']}"
+
+      title   =  evet_info + ' ' + data['result']
+      message = "[" + data["project_name"] + " / " + location + "]: " + "\n\n" + data["commit"]["message"].split("\n").shift() + "\n- " + data["commit"]["author_name"]
+
       opt =
         type: 'basic'
-        title: "Build ##{data['build_number']} #{data['result']}"
-        message: "[" + data["project_name"] + " / " + data["branch_name"] + "]: " + "\n\n" + data["commit"]["message"].split("\n").shift() + "\n- " + data["commit"]["author_name"]
+        title: title
+        message: message
         iconUrl: "../img/#{data['result']}.png"
 
-      id = "#{data['project_hash_id']}/#{data['branch_name']}/#{data['build_number']}"
+      return opt
+
+    notificationId = (data) ->
+      if data['event'] = 'deploy'
+        id = "#{data['project_hash_id']}/#{data['server_name']}/#{data['number']}"
+      else
+        id = "#{data['project_hash_id']}/#{data['branch_name']}/#{data['build_number']}"
+
+      return id
+
+    showNotification = (data, project) ->
+      opt = notificationTemplate data
+      id = notificationId data
 
       chrome.notifications.create id, opt, ->
 

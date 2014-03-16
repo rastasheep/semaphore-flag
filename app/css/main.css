@@ -142,7 +142,6 @@ a:hover {color: #333; }
 
 .panel {border-radius: 0 !important;}
 .panel-heading {
-  padding: 10px;
   background-color: #F2F2E9 !important;
 }
 .panel-title a {display: block; }
@@ -157,7 +156,7 @@ a:hover {color: #333; }
 }
 
 .table, .breadcrumb {
-  margin-bottom: 0 !important;
+  margin: 0 !important;
   background-color: #F2F2E9 !important;
   border-radius: 0;
 }

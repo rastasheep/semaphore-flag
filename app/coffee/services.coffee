@@ -91,7 +91,7 @@ app.service 'hookService', [ '$q', '$http', 'sharedData', 'base_url',
           url = "#{base_url}/#{project.hash_id}/hooks?auth_token=#{token}"
           data = {
             url: "http://semaphoreflag.herokuapp.com/#{md5(token, "flag")}",
-            hook_type: 'post_build'
+            hook_type: 'all'
           }
           $http.post(url, data).success((data) ->
             q.resolve data
