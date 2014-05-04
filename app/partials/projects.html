@@ -11,7 +11,7 @@
             ng-click="toggleStarFilter()"
             class="btn btn-default"
             ng-class="{true:'active'}[filterStared]"
-            tooltip-placement="bottom"
+            tooltip-placement="right"
             tooltip="Filter starred">
       <i class="fa"
          ng-class="{true:'fa-star', false:'fa-star-o'}[filterStared]"></i>
@@ -70,7 +70,6 @@
                 ng-repeat="branch in project.branches | orderBy:'branch_name'">
 
               <td>
-                <i class="fa fa-angle-right" ng-show="branch.branch_name == 'master'"></i>
                 <a href="{{branch.branch_url}}" target="_blank">
                   {{branch.branch_name}}
                 </a>
@@ -93,8 +92,8 @@
 
       <div ng-show="project.servers.length">
 
-        <h5 class="breadcrumb text-center">
-          <i class="fa fa-list"></i> Servers
+        <h5 class="breadcrumb">
+          <i class="fa fa-th-list"></i> Servers
         </h5>
 
         <table class="table">
@@ -103,7 +102,7 @@
                 ng-repeat="server in project.servers | orderBy:'server_name'">
 
               <td>
-                <a href="{{server.html_url}}" target="_blank">
+                <a href="{{server.server_html_url}}" target="_blank">
                   {{server.server_name}}
                 </a>
               </td>

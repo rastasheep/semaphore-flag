@@ -69,7 +69,7 @@ app.controller 'projectsController', ['$rootScope', '$scope', '$location', '$tim
 
     notificationTemplate = (data) ->
       if data['event'] == 'deploy'
-        location  = data["branch_name"]
+        location  = data["server_name"]
         evet_info =  "Deploy ##{data['number']}"
       else
         location  = data["branch_name"]
