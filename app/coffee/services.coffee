@@ -4,9 +4,14 @@ app_name = 'semaphoreFlag'
 app = angular.module "#{app_name}.services", []
 
 app.value('base_url', 'https://semaphoreapp.com/api/v1/projects')
+app.value('app_url', 'http://semaphoreflag.herokuapp.com')
+app.value('pusher_token', '196081c6021641d28f43')
 
-app.service 'sharedData', ['$q', ($q)->
+app.service 'sharedData', ['$q', 'pusher_token', ($q, pusher_token)->
   return (
+    getPusherToken: ->
+      pusher_token
+
     getToken: ->
       q = $q.defer()
       chrome.storage.local.get 'token', (result) ->
@@ -81,8 +86,8 @@ app.service 'projectService', ['$q', '$http', 'sharedData', 'base_url',
       q.promise
 ]
 
-app.service 'hookService', [ '$q', '$http', 'sharedData', 'base_url',
-  ($q, $http, sharedData, base_url) ->
+app.service 'hookService', [ '$q', '$http', 'sharedData', 'base_url', 'app_url'
+  ($q, $http, sharedData, base_url, app_url) ->
     return {
       setHook:(project) ->
         q = $q.defer()
@@ -90,7 +95,7 @@ app.service 'hookService', [ '$q', '$http', 'sharedData', 'base_url',
         sharedData.getToken().then (token) ->
           url = "#{base_url}/#{project.hash_id}/hooks?auth_token=#{token}"
           data = {
-            url: "http://semaphoreflag.herokuapp.com/#{md5(token, "flag")}",
+            url: "#{app_url}/#{md5(token, "flag")}",
             hook_type: 'all'
           }
           $http.post(url, data).success((data) ->

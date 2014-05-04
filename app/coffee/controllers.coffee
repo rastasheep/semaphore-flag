@@ -1,6 +1,8 @@
 'use strict'
 
 app_name = 'semaphoreFlag'
+pusher_token = '196081c6021641d28f43'
+
 app = angular.module "#{app_name}.controllers", []
 
 app.controller 'mainController', ['$rootScope', '$scope', '$location', 'sharedData'
@@ -50,7 +52,7 @@ app.controller 'projectsController', ['$rootScope', '$scope', '$location', '$tim
       return
 
     subscribeToPusherEvents = ->
-      pusher = new Pusher('196081c6021641d28f43')
+      pusher = new Pusher(sharedData.getPusherToken())
       sharedData.getToken().then (value) ->
         token = value
         channel_name = md5 token, 'flag'
